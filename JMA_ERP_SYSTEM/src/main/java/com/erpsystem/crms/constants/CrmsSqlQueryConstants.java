@@ -33,8 +33,8 @@ public class CrmsSqlQueryConstants {
 			"(select entity_key from erp_view e where e.attribute_id = 25 and e.entity_name='enquiry'\r\n" + 
 			" and e.value = ?) order by eaid asc) ex;";
 	
-	public static final String GENERIC_DATA_SEARCH = "SELECT e.entity_key,e.eaid,GROUP_CONCAT(e.value SEPARATOR ',') As Values1,e.entity_name FROM erp_view e where e.entity_name IN\r\n" + 
-			"(SELECT e.entity_name FROM erp_view e where e.value like '%?%' and e.entity_name=?)\r\n" + 
-			"and e.entity_key IN (SELECT e.entity_key FROM erp_view e where e.value like '%?%' and\r\n" + 
+	public static final String GENERIC_DATA_SEARCH = "SELECT e.entity_key,e.eaid,e.value ,e.entity_name  FROM erp_view e where e.entity_name IN\r\n" + 
+			"(SELECT e.entity_name FROM erp_view e where e.value like //%?//% and e.entity_name=?)\r\n" + 
+			"and e.entity_key IN (SELECT e.entity_key FROM erp_view e where e.value like //%?//% and\r\n" + 
 			"e.entity_name=?) order by entity_key asc;";
 }

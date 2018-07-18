@@ -3,22 +3,27 @@
  */
 package com.erpsystem.crms.data;
 
+import static com.erpsystem.crms.constants.CrmsSqlQueryConstants.GENERIC_DATA_SEARCH;
 import static com.erpsystem.crms.constants.CrmsSqlQueryConstants.GET_ATTRIBUTE_ID;
 import static com.erpsystem.crms.constants.CrmsSqlQueryConstants.GET_CURRENT_ENTITY_KEY;
 import static com.erpsystem.crms.constants.CrmsSqlQueryConstants.GET_EA_ID;
+import static com.erpsystem.crms.constants.CrmsSqlQueryConstants.GET_ENQUIRY_BY_PROCESS_STATUS;
 import static com.erpsystem.crms.constants.CrmsSqlQueryConstants.GET_ENTITY_ID;
 import static com.erpsystem.crms.constants.CrmsSqlQueryConstants.GET_IDENTIFIER;
+import static com.erpsystem.crms.constants.CrmsSqlQueryConstants.GET_USER_DTLS_BY_MOB;
 import static com.erpsystem.crms.constants.CrmsSqlQueryConstants.INSERT_MASTER_ENTITY;
 import static com.erpsystem.crms.constants.CrmsSqlQueryConstants.UPDATE_MASTER_ENTITY;
-import static com.erpsystem.crms.constants.CrmsSqlQueryConstants.GET_USER_DTLS_BY_MOB;
-import static com.erpsystem.crms.constants.CrmsSqlQueryConstants.GET_ENQUIRY_BY_PROCESS_STATUS;
-import static com.erpsystem.crms.constants.CrmsSqlQueryConstants.GENERIC_DATA_SEARCH;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
+
 import com.erpsystem.crms.model.MasterEntityModel;
+import com.erpsystem.crms.model.PersonModel;
 
 /**
  * @author AMRUTA
@@ -56,23 +61,103 @@ public class MasterEntityDaoImpl extends AbstractDatabaseConfig implements IMast
 			}
 		}
 	
-	public void searchData(final String entityName,final String searchString) throws Exception {
+	public List<PersonModel> searchData(final String entityName,final String searchString) throws Exception {
 		
 		ResultSet rs = null;
+		int counter = 0;
+		int eaid = 0;
+		
+		
+		PersonModel personModel = new PersonModel();
+		List<PersonModel> personDetailList = new ArrayList<>();
+		String srchStr = "'%".concat(searchString).concat("%'");
 		
 		try {
 			
 			if(null!=entityName && null!=searchString) {
 			
+				String GENERIC_DATA_SEARCH = "SELECT e.entity_key,e.eaid,e.value ,e.entity_name  FROM erp_view e where e.entity_name IN\r\n" + 
+						"(SELECT e.entity_name FROM erp_view e where e.value like "+srchStr+" and e.entity_name='"+entityName+"')\r\n" + 
+						"and e.entity_key IN (SELECT e.entity_key FROM erp_view e where e.value like "+srchStr+" and\r\n" + 
+						"e.entity_name='"+entityName+"') order by entity_key asc;";
+				
 				conn = getDbConn();
 				psmt = conn.prepareStatement(GENERIC_DATA_SEARCH);
-				psmt.setString(1, searchString);
-				psmt.setString(2, entityName);
-				psmt.setString(3, searchString);
-				psmt.setString(4, entityName);
+				//psmt.setString(1, entityName);
+				//psmt.setString(2, entityName);
 				rs = psmt.executeQuery();
 				
+				while(rs.next()) {
+					
+					++counter;
+					eaid = rs.getInt(2);
+					
+					switch(eaid) {
+					
+					case 1 : personModel.setPersonId(rs.getLong(3));
+						break;
+						
+					case 2 : personModel.setFirstName(rs.getString(3));
+						break;
+						
+					case 3 : personModel.setLastName(rs.getString(3));
+						break;
+						
+					case 4 : personModel.setMobileNo(rs.getString(3));
+						break;
+						
+					case 5 : personModel.setAddress(rs.getString(3));
+						break;
+						
+					case 6 : personModel.setDob(rs.getString(3));
+						break;
+						
+					case 7 : personModel.setAge(rs.getString(3));
+						break;
+						
+					case 8 : personModel.setAadharNo(rs.getString(3));
+						break;
+						
+					case 9 : personModel.setPanNo(rs.getString(3));
+						break;
+						
+					case 10 : personModel.setMailId(rs.getString(3));
+						break;
+						
+					case 11 : personModel.setOrganisation(rs.getString(3));
+						break;
+						
+					case 12 : personModel.setOrganisation(rs.getString(3));
+						break;
+						
+					case 13 : personModel.setOrgRole(rs.getString(3));
+						break;
+						
+					case 14 : personModel.setCity(rs.getString(3));
+						break;
+						
+					case 15 : personModel.setPinCode(rs.getString(3));
+						break;
+						
+					case 16 : personModel.setOccupation(rs.getString(3));
+						break;	
+						
+					default : System.out.println("In default");	
+					
+					}
+					
+					if(counter==16) {
+						personDetailList.add(personModel);
+						personModel = new PersonModel();
+					}
+					
 				}
+				
+				
+				
+				}
+			
+			return personDetailList;
 			
 		} catch(final Exception exception) {
 			throw new Exception(exception);

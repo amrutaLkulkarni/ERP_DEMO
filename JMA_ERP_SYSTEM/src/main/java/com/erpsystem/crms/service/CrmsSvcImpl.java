@@ -3,12 +3,18 @@
  */
 package com.erpsystem.crms.service;
 
+import java.sql.SQLException;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.erpsystem.crms.data.IMasterEntityDao;
+import com.erpsystem.crms.model.BranchModel;
 import com.erpsystem.crms.model.CommunicationModel;
+import com.erpsystem.crms.model.DesignationModel;
 import com.erpsystem.crms.model.EmployeeModel;
 import com.erpsystem.crms.model.EntityDetailsModel;
 import com.erpsystem.crms.model.InquiryModel;
@@ -53,6 +59,14 @@ public class CrmsSvcImpl implements ICrmsSvc {
 			
 		}
 		
+		
+	}
+	
+	@Transactional(propagation = Propagation.REQUIRED)
+	public List<PersonModel> searchDataSvc(final String entityName,final String searchString) throws Exception {
+		
+		List<PersonModel> personModel = masterEntityDao.searchData(entityName, searchString);
+		return personModel;
 		
 	}
 
@@ -133,6 +147,24 @@ public class CrmsSvcImpl implements ICrmsSvc {
 		addUserInSystem("employee", "reportingto", ""+ employeeModel.getReportingTo(), false);
 		addUserInSystem("employee", "personid", ""+ employeeModel.getPersonId(), false);
 	}
+	
+	@Transactional(propagation = Propagation.REQUIRED)
+	public void designationCreation(DesignationModel designationModel)
+			throws ClassNotFoundException, SQLException, Exception {
+		addUserInSystem("designation", "desgnid", "", true);
+		addUserInSystem("designation", "desgName", designationModel.getDesgName(), false);
+				
+	}
+	
+	@Transactional(propagation = Propagation.REQUIRED)
+	public void branchCreation(BranchModel branchModel) 
+			throws ClassNotFoundException, SQLException, Exception {
+		addUserInSystem("branch", "branchid", "", true);
+		addUserInSystem("branch", "title", branchModel.getTitle(), false);
+		addUserInSystem("branch", "location", branchModel.getLocation(), false);
+		addUserInSystem("branch", "contno", branchModel.getContno(), false);
+	}
+
 	private EntityDetailsModel getmasterEntityModelDtls(final String entityName,final String attrName,final String attrValue) 
 			throws Exception {
 		
@@ -241,5 +273,10 @@ public class CrmsSvcImpl implements ICrmsSvc {
 		
 		return inquiryModel;
 	}
+
+	
+	
+	
+	
 	
 }
