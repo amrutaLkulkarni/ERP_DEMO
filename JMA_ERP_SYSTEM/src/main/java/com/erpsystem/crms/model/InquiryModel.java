@@ -1,32 +1,31 @@
 package com.erpsystem.crms.model;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+
 
 public class InquiryModel {
 
 	private long InquiryId;
-	private LocalDate datevalue; 
-	private Long branch;
-	private Long enquirysource;
-	private Long enquiryfor;
-	private Long targetProduct;
+	private String datevalue; 
+	private long branch;
+	private long enquirysource;
+	private long enquiryfor;
+	private long targetProduct;
 	private String description;
 	private String processStatus;
-	private LocalDate followupdate;
+	private String followupdate;
 	private String remarkvalue;
-	private Long statusvalue;
-	private LocalDateTime lastUpdate;
+	private long statusvalue;
+	private String lastUpdate;
 	public long getInquiryId() {
 		return InquiryId;
 	}
 	public void setInquiryId(long inquiryId) {
 		InquiryId = inquiryId;
 	}
-	public LocalDate getDatevalue() {
+	public String getDatevalue() {
 		return datevalue;
 	}
-	public void setDatevalue(LocalDate datevalue) {
+	public void setDatevalue(String datevalue) {
 		this.datevalue = datevalue;
 	}
 	public Long getBranch() {
@@ -65,10 +64,10 @@ public class InquiryModel {
 	public void setProcessStatus(String processStatus) {
 		this.processStatus = processStatus;
 	}
-	public LocalDate getFollowupdate() {
+	public String getFollowupdate() {
 		return followupdate;
 	}
-	public void setFollowupdate(LocalDate followupdate) {
+	public void setFollowupdate(String followupdate) {
 		this.followupdate = followupdate;
 	}
 	public String getRemarkvalue() {
@@ -83,10 +82,10 @@ public class InquiryModel {
 	public void setStatusvalue(Long statusvalue) {
 		this.statusvalue = statusvalue;
 	}
-	public LocalDateTime getLastUpdate() {
+	public String getLastUpdate() {
 		return lastUpdate;
 	}
-	public void setLastUpdate(LocalDateTime lastUpdate) {
+	public void setLastUpdate(String lastUpdate) {
 		this.lastUpdate = lastUpdate;
 	}
 	

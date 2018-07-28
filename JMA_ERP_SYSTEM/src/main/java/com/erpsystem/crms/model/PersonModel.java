@@ -19,11 +19,13 @@ public class PersonModel {
 	private String organisation;
 	private String orgLocation;
 	private String orgRole;
+	//private long city;
 	private String city;
 	//private Blob photo;
 	private String pinCode;
 	private String occupation;
-	private long branch;
+	//private long branch;
+	private String branch;
 	private long reffId;
 	
 	
@@ -121,6 +123,13 @@ public class PersonModel {
 	public void setOrgRole(String orgRole) {
 		this.orgRole = orgRole;
 	}
+	/*public Long getCity() {
+		return city;
+	}
+	public void setCity(Long city) {
+		this.city = city;
+	}*/
+	
 	public String getCity() {
 		return city;
 	}
@@ -146,12 +155,20 @@ public class PersonModel {
 	public void setOccupation(String occupation) {
 		this.occupation = occupation;
 	}
-	public long getBranch() {
+	/*public long getBranch() {
 		return branch;
 	}
 	public void setBranch(long branch) {
 		this.branch = branch;
+	}*/
+	
+	public String getBranch() {
+		return branch;
 	}
+	public void setBranch(String branch) {
+		this.branch = branch;
+	}
+	
 	public long getReffId() {
 		return reffId;
 	}

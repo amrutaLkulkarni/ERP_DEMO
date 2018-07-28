@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public class EmployeeModel {
 
 	private long employeeId;
-	private LocalDate dateofjoining;
+	private String dateofjoining;
 	private String designation;
 	private long branch;
 	private long reportingTo;
@@ -16,10 +16,10 @@ public class EmployeeModel {
 	public void setEmployeeId(long employeeId) {
 		this.employeeId = employeeId;
 	}
-	public LocalDate getDateofjoining() {
+	public String getDateofjoining() {
 		return dateofjoining;
 	}
-	public void setDateofjoining(LocalDate dateofjoining) {
+	public void setDateofjoining(String dateofjoining) {
 		this.dateofjoining = dateofjoining;
 	}
 	public String getDesignation() {

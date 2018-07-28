@@ -7,7 +7,6 @@
 	<groupId>com.JMA</groupId>
 	<artifactId>JMA_ERP_SYSTEM</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
 
 	<name>JMA_ERP_SYSTEM</name>
 	<description>Demo project for Spring Boot</description>

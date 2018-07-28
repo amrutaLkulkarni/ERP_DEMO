@@ -4,6 +4,7 @@ public class UserDetailRequest {
 	
 	private String mobileNo;
 	private String processStatus;
+	private long designationId;
 
 	public String getMobileNo() {
 		return mobileNo;
@@ -19,6 +20,14 @@ public class UserDetailRequest {
 
 	public void setProcessStatus(String processStatus) {
 		this.processStatus = processStatus;
+	}
+
+	public long getDesignationId() {
+		return designationId;
+	}
+
+	public void setDesignationId(long designationId) {
+		this.designationId = designationId;
 	}
 
 	

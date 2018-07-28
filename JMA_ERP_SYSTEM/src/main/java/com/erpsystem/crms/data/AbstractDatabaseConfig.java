@@ -10,7 +10,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import org.springframework.stereotype.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 
+import org.springframework.stereotype.Service;
 /**
  * @author AMRUTA
  *
@@ -20,11 +24,19 @@ import org.springframework.stereotype.Repository;
 public class AbstractDatabaseConfig {
 	
 	private static Connection conn = null;
+	@Autowired
+	private Environment env;
 	
-	protected static Connection getDbConn() throws ClassNotFoundException, SQLException {
+	protected  Connection getDbConn() throws ClassNotFoundException, SQLException {
+		
+		String datasource = env.getProperty("spring.datasource.url");
+		String username = env.getProperty("spring.datasource.username");
+		String password = env.getProperty("spring.datasource.password");
 		
 		Class.forName("com.mysql.jdbc.Driver");
-		conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/erp_system","root","root");
+		//conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/erp_system","root","root");
+		conn = DriverManager.getConnection(datasource,username,password);
+
 		return conn;
 
 	}
