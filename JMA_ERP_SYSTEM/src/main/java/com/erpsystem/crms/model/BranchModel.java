@@ -6,6 +6,7 @@ public class BranchModel {
 	private String title;
 	private String location;
 	private String contno;
+	
 	public long getBranchid() {
 		return branchid;
 	}

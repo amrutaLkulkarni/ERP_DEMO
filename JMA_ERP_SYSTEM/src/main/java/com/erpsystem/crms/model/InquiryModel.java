@@ -4,7 +4,7 @@ package com.erpsystem.crms.model;
 
 public class InquiryModel {
 
-	private long InquiryId;
+	private long inquiryId;
 	private String datevalue; 
 	private long branch;
 	private long enquirysource;
@@ -16,11 +16,14 @@ public class InquiryModel {
 	private String remarkvalue;
 	private long statusvalue;
 	private String lastUpdate;
+	private long personid;
+	
+	
 	public long getInquiryId() {
-		return InquiryId;
+		return inquiryId;
 	}
 	public void setInquiryId(long inquiryId) {
-		InquiryId = inquiryId;
+		this.inquiryId = inquiryId;
 	}
 	public String getDatevalue() {
 		return datevalue;
@@ -28,28 +31,28 @@ public class InquiryModel {
 	public void setDatevalue(String datevalue) {
 		this.datevalue = datevalue;
 	}
-	public Long getBranch() {
+	public long getBranch() {
 		return branch;
 	}
-	public void setBranch(Long branch) {
+	public void setBranch(long branch) {
 		this.branch = branch;
 	}
-	public Long getEnquirysource() {
+	public long getEnquirysource() {
 		return enquirysource;
 	}
-	public void setEnquirysource(Long enquirysource) {
+	public void setEnquirysource(long enquirysource) {
 		this.enquirysource = enquirysource;
 	}
-	public Long getEnquiryfor() {
+	public long getEnquiryfor() {
 		return enquiryfor;
 	}
-	public void setEnquiryfor(Long enquiryfor) {
+	public void setEnquiryfor(long enquiryfor) {
 		this.enquiryfor = enquiryfor;
 	}
-	public Long getTargetProduct() {
+	public long getTargetProduct() {
 		return targetProduct;
 	}
-	public void setTargetProduct(Long targetProduct) {
+	public void setTargetProduct(long targetProduct) {
 		this.targetProduct = targetProduct;
 	}
 	public String getDescription() {
@@ -76,10 +79,10 @@ public class InquiryModel {
 	public void setRemarkvalue(String remarkvalue) {
 		this.remarkvalue = remarkvalue;
 	}
-	public Long getStatusvalue() {
+	public long getStatusvalue() {
 		return statusvalue;
 	}
-	public void setStatusvalue(Long statusvalue) {
+	public void setStatusvalue(long statusvalue) {
 		this.statusvalue = statusvalue;
 	}
 	public String getLastUpdate() {
@@ -88,6 +91,13 @@ public class InquiryModel {
 	public void setLastUpdate(String lastUpdate) {
 		this.lastUpdate = lastUpdate;
 	}
+	public long getPersonid() {
+		return personid;
+	}
+	public void setPersonid(long personid) {
+		this.personid = personid;
+	}
+	
 	
 	
 }

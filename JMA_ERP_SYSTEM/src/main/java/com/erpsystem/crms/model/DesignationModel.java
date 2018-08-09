@@ -2,13 +2,13 @@ package com.erpsystem.crms.model;
 
 public class DesignationModel {
 
-	private long desgnid;
+	private long desgid;
 	private String desgName;
-	public long getDesgnid() {
-		return desgnid;
+	public long getDesgid() {
+		return desgid;
 	}
-	public void setDesgnid(long desgnid) {
-		this.desgnid = desgnid;
+	public void setDesgid(long desgid) {
+		this.desgid = desgid;
 	}
 	public String getDesgName() {
 		return desgName;
@@ -16,6 +16,7 @@ public class DesignationModel {
 	public void setDesgName(String desgName) {
 		this.desgName = desgName;
 	}
+	
 	
 	
 }

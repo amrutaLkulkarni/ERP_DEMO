@@ -2,13 +2,16 @@ package com.erpsystem.crms.model;
 
 public class EnquiryForModel {
 	
-	private long id;
+	private long enqforid;
 	private String enqfor;
-	public long getId() {
-		return id;
+	
+	
+	
+	public long getEnqforid() {
+		return enqforid;
 	}
-	public void setId(long id) {
-		this.id = id;
+	public void setEnqforid(long enqforid) {
+		this.enqforid = enqforid;
 	}
 	public String getEnqfor() {
 		return enqfor;

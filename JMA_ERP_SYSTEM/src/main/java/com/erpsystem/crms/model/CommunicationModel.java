@@ -5,31 +5,42 @@ import java.time.LocalDate;
 public class CommunicationModel {
 	
 	private long commid;
+	private long commfor;
 	private long medium;
-	private LocalDate datevalue;
+	private String datevalue;
 	private String description;
 	private String processStatus;
 	private String conclusion;
-	private LocalDate followupdate;
+	private String followupdate;
 	private String remarkvalue;
 	private long personid;
-	private long enquiryid;
+	private long inquiryId;
+	
 	public long getCommid() {
 		return commid;
 	}
 	public void setCommid(long commid) {
 		this.commid = commid;
 	}
+	
+	
+	public long getCommfor() {
+		return commfor;
+	}
+	public void setCommfor(long commfor) {
+		this.commfor = commfor;
+	}
+	
 	public long getMedium() {
 		return medium;
 	}
 	public void setMedium(long medium) {
 		this.medium = medium;
 	}
-	public LocalDate getDatevalue() {
+	public String getDatevalue() {
 		return datevalue;
 	}
-	public void setDatevalue(LocalDate datevalue) {
+	public void setDatevalue(String datevalue) {
 		this.datevalue = datevalue;
 	}
 	public String getDescription() {
@@ -50,10 +61,10 @@ public class CommunicationModel {
 	public void setConclusion(String conclusion) {
 		this.conclusion = conclusion;
 	}
-	public LocalDate getFollowupdate() {
+	public String getFollowupdate() {
 		return followupdate;
 	}
-	public void setFollowupdate(LocalDate followupdate) {
+	public void setFollowupdate(String followupdate) {
 		this.followupdate = followupdate;
 	}
 	public String getRemarkvalue() {
@@ -68,12 +79,14 @@ public class CommunicationModel {
 	public void setPersonid(long personid) {
 		this.personid = personid;
 	}
-	public long getEnquiryid() {
-		return enquiryid;
+	public long getInquiryId() {
+		return inquiryId;
 	}
-	public void setEnquiryid(long enquiryid) {
-		this.enquiryid = enquiryid;
+	public void setInquiryId(long inquiryId) {
+		this.inquiryId = inquiryId;
 	}
+	
+	
 	
 	
 }

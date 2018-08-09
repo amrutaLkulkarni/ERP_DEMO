@@ -4,17 +4,20 @@ import java.time.LocalDate;
 
 public class EmployeeModel {
 
-	private long employeeId;
+	private long employeeid;
 	private String dateofjoining;
 	private String designation;
 	private long branch;
 	private long reportingTo;
-	private long personId;
-	public long getEmployeeId() {
-		return employeeId;
+	private long personid;
+
+
+	
+	public long getEmployeeid() {
+		return employeeid;
 	}
-	public void setEmployeeId(long employeeId) {
-		this.employeeId = employeeId;
+	public void setEmployeeid(long employeeid) {
+		this.employeeid = employeeid;
 	}
 	public String getDateofjoining() {
 		return dateofjoining;
@@ -40,12 +43,13 @@ public class EmployeeModel {
 	public void setReportingTo(long reportingTo) {
 		this.reportingTo = reportingTo;
 	}
-	public long getPersonId() {
-		return personId;
+	public long getPersonid() {
+		return personid;
 	}
-	public void setPersonId(long personId) {
-		this.personId = personId;
+	public void setPersonid(long personid) {
+		this.personid = personid;
 	}
+	
 	
 	
 }

@@ -3,21 +3,22 @@ package com.erpsystem.crms.model;
 public class TaskModel {
 
 	private long taskid;
-	private String title;
+	private String task_title;
 	private long assignto;
 	private String description;
-	private long expdate;
+	private String expdate;
 	public long getTaskid() {
 		return taskid;
 	}
 	public void setTaskid(long taskid) {
 		this.taskid = taskid;
 	}
-	public String getTitle() {
-		return title;
+	
+	public String getTask_title() {
+		return task_title;
 	}
-	public void setTitle(String title) {
-		this.title = title;
+	public void setTask_title(String task_title) {
+		this.task_title = task_title;
 	}
 	public long getAssignto() {
 		return assignto;
@@ -31,12 +32,13 @@ public class TaskModel {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public long getExpdate() {
+	public String getExpdate() {
 		return expdate;
 	}
-	public void setExpdate(long expdate) {
+	public void setExpdate(String expdate) {
 		this.expdate = expdate;
 	}
+	
 	
 	
 }
