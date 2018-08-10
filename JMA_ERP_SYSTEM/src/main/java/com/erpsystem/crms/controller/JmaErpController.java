@@ -29,7 +29,7 @@ public class JmaErpController {
 	
 	@CrossOrigin("*")
 	@RequestMapping(value = "/addEntity",method = RequestMethod.POST,
-	consumes = {"text/plain" , "application/xml"},produces = {"application/json" , "application/xml"})
+	consumes = {"application/json" , "application/xml"},produces = {"application/json" , "application/xml"})
 	public void addRecord(@RequestBody String inputJson , HttpServletRequest request,
 			HttpServletResponse response)throws Exception {
 		
@@ -87,7 +87,7 @@ public class JmaErpController {
 	
 	@CrossOrigin("*")
 	@RequestMapping(value = "/getAllEntity/{entity_name}",method = RequestMethod.GET,
-	consumes = {"text/plain" , "application/xml"},produces = {"text/plain"})
+	consumes = {"text/plain" , "application/xml"},produces = {"application/json"})
 		public String getAllRecord(@PathVariable("entity_name") String entity_name,  HttpServletRequest request,
 			HttpServletResponse response)throws Exception {
 	
@@ -105,7 +105,7 @@ public class JmaErpController {
 
 	@CrossOrigin("*")
 	@RequestMapping(value = "/getEntityById/{entity_name}/{entity_key}",method = RequestMethod.GET,
-	consumes = {"text/plain" , "application/xml"},produces = {"text/plain"})
+	consumes = {"text/plain" , "application/xml"},produces = {"application/json"})
 	public String getEntityById(@PathVariable("entity_name") String entity_name,@PathVariable ("entity_key") long entity_key , HttpServletRequest request,
 			HttpServletResponse response)throws Exception  {
 	

@@ -264,6 +264,7 @@ public class MasterEntityDaoImplNew extends AbstractDatabaseConfig implements IM
 					counter++;
 					
 					if(counter==attrCount-1) {
+						recordMap.put("entity_key_id", rs.getString(2));
 						counter = 0;
 						jsonMapList.add(recordMap);
 						recordMap = new HashMap<>();
