@@ -19,7 +19,7 @@ public class CrmsSvcNewImpl implements ICrmsSvcNew {
 	@Autowired
 	IMasterEntityDaoNew masterEntityDaoNew;
 
-	@Transactional(propagation = Propagation.REQUIRED)
+	/*@Transactional(propagation = Propagation.REQUIRED)
 	public void addRecordInSystem(final long entityKey, final String ent_name, final String attr_name,
 			final String value) throws Exception {
 
@@ -34,12 +34,24 @@ public class CrmsSvcNewImpl implements ICrmsSvcNew {
 
 			masterEntityDaoNew.addDataInMasterEntity(masterEntityModel);
 		}
+	}*/
+	
+	@Transactional(propagation = Propagation.REQUIRED)
+	public void addRecordInSystem(final long entityKey, final String ent_name, final Map<String,String> jsonMap) 
+			throws Exception {
+
+		if (null != masterEntityDaoNew) {
+
+			masterEntityDaoNew.addDataInMasterEntity(entityKey,ent_name,jsonMap);
+		}
 	}
 
 	public long getEntityKeyFromSystem(final String entityName) throws Exception {
 
 		long entityKey = masterEntityDaoNew.getIdentifier(entityName);
-		return entityKey + 1;
+		long entity_key = entityKey+1;
+		
+		return entity_key;
 
 	}
 
@@ -69,16 +81,16 @@ public class CrmsSvcNewImpl implements ICrmsSvcNew {
 	}
 
 	private MasterEntityModel getMasterEntityModelForUpdate(final String ent_name, final String attr_name,
-			final String value) throws Exception {
+			final String value, final String entity_key) throws Exception {
 
 		final long eaid = masterEntityDaoNew.getEaidUpdate(ent_name, attr_name);
 
-		final long entityKey = masterEntityDaoNew.getEntityKeyFromEaid(eaid);
+		//final long entityKey = masterEntityDaoNew.getEntityKeyFromEaid(eaid);
 
 		MasterEntityModel masterDetailsModel = new MasterEntityModel();
 
 		masterDetailsModel.setEaid(eaid);
-		masterDetailsModel.setEntityKey(entityKey);
+		masterDetailsModel.setEntityKey(Long.parseLong(entity_key));
 		masterDetailsModel.setValue(value);
 
 		return masterDetailsModel;
@@ -86,10 +98,10 @@ public class CrmsSvcNewImpl implements ICrmsSvcNew {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED)
-	public void updateRecordInSystem(String entityName, String key, String value) throws Exception {
+	public void updateRecordInSystem(String entityName, String key, String value, String entity_key) throws Exception {
 		// TODO Auto-generated method stub
 		if (null != masterEntityDaoNew) {
-			MasterEntityModel masterEntityModel = getMasterEntityModelForUpdate(entityName, key, value);
+			MasterEntityModel masterEntityModel = getMasterEntityModelForUpdate(entityName, key, value,entity_key);
 
 			masterEntityDaoNew.updateDataInMasterEntity(masterEntityModel);
 		}
@@ -115,18 +127,33 @@ public class CrmsSvcNewImpl implements ICrmsSvcNew {
 			jsonObjectList.add(jsonObject);
 			jsonObject = new JSONObject();
 		}
-		
-		
-		
-		/*for(Map.Entry<String, String> entry : recordMap.entrySet()) {
-			
-			jsonObject.put(entry.getKey(), entry.getValue());
-			
-		}*/
+	
 		return jsonObjectList;
 		
 	}
 
+	public List<JSONObject> getEntityByEntityIdList(long entityId,String entity_name, String attr_name, String value)
+			throws Exception {
+		// TODO Auto-generated method stub
+		List<Map<String,String>> recordMapList = masterEntityDaoNew.getEntityByEntityIdList(entityId,entity_name, attr_name, value);
+		
+		List<JSONObject> jsonObjectList = new ArrayList<>();
+		JSONObject jsonObject = new JSONObject();
+		
+       for(Map<String, String> jsonMap : recordMapList) {
+			
+			for(Map.Entry<String, String> entry :jsonMap.entrySet()) {
+				
+				jsonObject.put(entry.getKey(), entry.getValue());
+			}
+			
+			jsonObjectList.add(jsonObject);
+			jsonObject = new JSONObject();
+		}
+		return jsonObjectList;
+	}
+	
+	
 	@Transactional(propagation = Propagation.REQUIRED)
 	public long getEntityIdFromEntityName(String entityName) throws Exception {
 		return masterEntityDaoNew.getEntityIdFromEntityName(entityName);
@@ -139,4 +166,14 @@ public class CrmsSvcNewImpl implements ICrmsSvcNew {
 		JSONObject jsonObj =masterEntityDaoNew.getEntityById(entity_key, entity_name);
 		return jsonObj;
 	}
+
+
+	public JSONObject getEntityByEntityId(String entity_name, String attr_name, String value) throws Exception {
+		// TODO Auto-generated method stub
+		JSONObject jsonObject = masterEntityDaoNew.getEntityByEntityId(entity_name, attr_name, value);
+		return jsonObject;
+	}
+
+	
+	
 }

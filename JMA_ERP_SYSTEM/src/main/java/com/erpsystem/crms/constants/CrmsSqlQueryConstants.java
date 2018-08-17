@@ -11,7 +11,7 @@ public class CrmsSqlQueryConstants {
 	
 	public static final String INSERT_MASTER_ENTITY = "INSERT INTO master_entity (eaid, entity_key,value) VALUES (?,?,?);";
 
-	public static final String UPDATE_MASTER_ENTITY = "UPDATE master_entity SET value = ? where eaid = ? and entity_key = ?";
+	public static final String UPDATE_MASTER_ENTITY = "UPDATE master_entity SET value = ? where eaid = ? and  entity_key = ?";
 		
 	public static final String GET_ENTITY_ID = "SELECT entity_id FROM entity_data WHERE name = ?;";
 	
@@ -129,6 +129,8 @@ public class CrmsSqlQueryConstants {
 	
 	public static final String 	GET_Record_FROM_ENTITY_KEY = "SELECT attr_name, VALUE FROM erp_view WHERE entity_key = ? AND entity_name= ?;";
 	
+	public static final String 	GET_ENTITY_FROM_ENTITY_KEY = "SELECT attr_name, VALUE FROM erp_view WHERE entity_name=? AND entity_key IN (SELECT entity_key FROM erp_view WHERE attr_name = ? AND VALUE = ?);";
+
 	public static final String GET_ATTR_COUNT = "SELECT COUNT(attribute_id) FROM link_entity_attribute WHERE entity_id = ?";
 	
 	public static final String GET_ALL_Enquiry = "select entity_name,attribute_id,attr_name,value from erp_view where entity_id =2 order by entity_key,attribute_id asc;";
