@@ -129,7 +129,7 @@ public class CrmsSqlQueryConstants {
 	
 	public static final String 	GET_Record_FROM_ENTITY_KEY = "SELECT attr_name, VALUE FROM erp_view WHERE entity_key = ? AND entity_name= ?;";
 	
-	public static final String 	GET_ENTITY_FROM_ENTITY_KEY = "SELECT attr_name, VALUE FROM erp_view WHERE entity_name=? AND entity_key IN (SELECT entity_key FROM erp_view WHERE attr_name = ? AND VALUE = ?);";
+	public static final String 	GET_ENTITY_FROM_ENTITY_KEY = "SELECT attr_name, VALUE FROM erp_view WHERE entity_name=? AND entity_key IN (SELECT entity_key FROM erp_view WHERE attr_name = ? AND VALUE = ? AND entity_name = ?);";
 
 	public static final String GET_ATTR_COUNT = "SELECT COUNT(attribute_id) FROM link_entity_attribute WHERE entity_id = ?";
 	

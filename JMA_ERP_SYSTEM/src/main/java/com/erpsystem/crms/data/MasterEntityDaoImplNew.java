@@ -23,18 +23,25 @@ import java.util.List;
 import java.util.Map;
 
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import com.erpsystem.crms.model.MasterEntityModel;
 
+import javax.sql.DataSource;
+
 @Service
 public class MasterEntityDaoImplNew extends AbstractDatabaseConfig implements IMasterEntityDaoNew {
 
-	private static PreparedStatement psmt = null;
+	private PreparedStatement psmt;
 
 	private static Connection conn = null;
 
 	private int result = 0;
+
+	@Autowired
+    DataSource dataSource;
 
 	public long getEaId(final String ent_name, final String attr_name) throws Exception {
 
@@ -42,14 +49,16 @@ public class MasterEntityDaoImplNew extends AbstractDatabaseConfig implements IM
 		long eaid = 0;
 		ResultSet rs = null;
 
-		try {
+		try (Connection connn = dataSource.getConnection(); PreparedStatement psmtt = connn.prepareStatement(GET_EAID)){
 
-			conn = getDbConn();
-			psmt = conn.prepareStatement(GET_EAID);
-			psmt.setString(1, ent_name);
-			psmt.setString(2, attr_name);
+			//conn = getDbConn();
+			//conn = dataSource.getConnection();
 
-			rs = psmt.executeQuery();
+			//psmt = connn.prepareStatement(GET_EAID);
+			psmtt.setString(1, ent_name);
+			psmtt.setString(2, attr_name);
+
+			rs = psmtt.executeQuery();
 
 			while (rs.next()) {
 				eaidRs = rs.getString(1);
@@ -77,10 +86,10 @@ public class MasterEntityDaoImplNew extends AbstractDatabaseConfig implements IM
 		long eaid = 0;
 		ResultSet rs = null;
 
-		try {
+		try (Connection connn = dataSource.getConnection()){
 
-			conn = getDbConn();
-			psmt = conn.prepareStatement(GET_CURRENT_ENTITY_KEY);
+			//conn = getDbConn();
+			psmt = connn.prepareStatement(GET_CURRENT_ENTITY_KEY);
 			psmt.setString(1, ent_name);
 			rs = psmt.executeQuery();
 
@@ -100,10 +109,10 @@ public class MasterEntityDaoImplNew extends AbstractDatabaseConfig implements IM
 
 	public void addDataInMasterEntity(MasterEntityModel masterEntityModel) throws Exception {
 		// TODO Auto-generated method stub
-		try {
+		try (Connection connn = dataSource.getConnection()){
 			if (null != masterEntityModel) {
-				conn = getDbConn();
-				psmt = conn.prepareStatement(INSERT_MASTER_ENTITY);
+				//conn = getDbConn();
+				psmt = connn.prepareStatement(INSERT_MASTER_ENTITY);
 				psmt.setLong(1, masterEntityModel.getEaid());
 				psmt.setLong(2, masterEntityModel.getEntityKey());
 				psmt.setString(3, masterEntityModel.getValue());
@@ -124,10 +133,10 @@ public class MasterEntityDaoImplNew extends AbstractDatabaseConfig implements IM
 		long entityKey = 0;
 		ResultSet rs = null;
 
-		try {
+		try (Connection connn = dataSource.getConnection()){
 
-			conn = getDbConn();
-			psmt = conn.prepareStatement(GET_IDENTIFIER);
+			//conn = getDbConn();
+			psmt = connn.prepareStatement(GET_IDENTIFIER);
 			psmt.setString(1, ent_name);
 			rs = psmt.executeQuery();
 
@@ -152,14 +161,14 @@ public class MasterEntityDaoImplNew extends AbstractDatabaseConfig implements IM
 		long eaid = 0;
 		ResultSet rs = null;
 
-		try {
+		try (Connection connn = dataSource.getConnection(); PreparedStatement psmtt = connn.prepareStatement(GET_EAID_UPADTE)){
 
-			conn = getDbConn();
-			psmt = conn.prepareStatement(GET_EAID_UPADTE);
-			psmt.setString(1, ent_name);
-			psmt.setString(2, attr_name);
+			//conn = getDbConn();
+			//psmt = connn.prepareStatement(GET_EAID_UPADTE);
+			psmtt.setString(1, ent_name);
+			psmtt.setString(2, attr_name);
 
-			rs = psmt.executeQuery();
+			rs = psmtt.executeQuery();
 
 			while (rs.next()) {
 				eaidRs = rs.getString(1);
@@ -187,12 +196,12 @@ public class MasterEntityDaoImplNew extends AbstractDatabaseConfig implements IM
 		long eaId = 0;
 		ResultSet rs = null;
 
-		try {
+		try (Connection connn = dataSource.getConnection(); PreparedStatement psmtt = connn.prepareStatement(GET_ENTITY_KEY_FROM_EAID)){
 
-			conn = getDbConn();
-			psmt = conn.prepareStatement(GET_ENTITY_KEY_FROM_EAID);
-			psmt.setLong(1, eaid);
-			rs = psmt.executeQuery();
+			//conn = getDbConn();
+			//psmtt = connn.prepareStatement(GET_ENTITY_KEY_FROM_EAID);
+			psmtt.setLong(1, eaid);
+			rs = psmtt.executeQuery();
 
 			while (rs.next()) {
 				eaId = rs.getLong(1);
@@ -210,12 +219,12 @@ public class MasterEntityDaoImplNew extends AbstractDatabaseConfig implements IM
 
 	public void updateDataInMasterEntity(MasterEntityModel masterEntityModel) throws Exception {
 		// TODO Auto-generated method stub
-		try {
+		try (Connection connn = dataSource.getConnection()){
 
 			if (null != masterEntityModel) {
 
-				conn = getDbConn();
-				psmt = conn.prepareStatement(UPDATE_MASTER_ENTITY);
+				//conn = getDbConn();
+				psmt = connn.prepareStatement(UPDATE_MASTER_ENTITY);
 
 				psmt.setString(1, masterEntityModel.getValue());
 				psmt.setLong(2, masterEntityModel.getEaid());
@@ -236,11 +245,14 @@ public class MasterEntityDaoImplNew extends AbstractDatabaseConfig implements IM
 	public List<Map<String, String>> getAllPerson(long entityId) throws Exception {
 		// TODO Auto-generated method stub
 		ResultSet rs = null;
-		try {
-			conn = getDbConn();
-			psmt = conn.prepareStatement(GET_ALL_RECORD);
-			psmt.setLong(1, entityId);
-			rs = psmt.executeQuery();
+		try (Connection connn = dataSource.getConnection(); 
+				
+			PreparedStatement psmtt = connn.prepareStatement(GET_ALL_RECORD)){
+			//conn = getDbConn();
+            //conn = dataSource.getConnection();
+			//psmt = connn.prepareStatement(GET_ALL_RECORD);
+			psmtt.setLong(1, entityId);
+			rs = psmtt.executeQuery();
 
 			Map<String, String> recordMap = new HashMap<>();
 			List<Map<String, String>> jsonMapList = new ArrayList<>();
@@ -282,14 +294,17 @@ public class MasterEntityDaoImplNew extends AbstractDatabaseConfig implements IM
 		
 		JSONObject jsonObject= new JSONObject();
 		
-		try {
+		try (Connection connn = dataSource.getConnection(); 
+				
+				PreparedStatement psmtt = connn.prepareStatement(GET_ENTITY_FROM_ENTITY_KEY)){
 
-			conn = getDbConn();
-			psmt = conn.prepareStatement(GET_ENTITY_FROM_ENTITY_KEY);
-			psmt.setString(1, entity_name);
-			psmt.setString(2, attr_name);
-			psmt.setString(3, value);
-			rs = psmt.executeQuery();
+            //conn = dataSource.getConnection();
+			//psmt = connn.prepareStatement(GET_ENTITY_FROM_ENTITY_KEY);
+			psmtt.setString(1, entity_name);
+			psmtt.setString(2, attr_name);
+			psmtt.setString(3, value);
+			psmtt.setString(4, entity_name);
+			rs = psmtt.executeQuery();
 
 			Map<String, String> recordMap = new HashMap<>();
 			List<Map<String, String>> jsonMapList = new ArrayList<>();
@@ -327,15 +342,16 @@ public class MasterEntityDaoImplNew extends AbstractDatabaseConfig implements IM
 		ResultSet rs = null;
 		long attrCount = 0;
 
-		try {
-			conn = getDbConn();
-			psmt = conn.prepareStatement(GET_ATTR_COUNT);
-			psmt.setLong(1, entityId);
-			rs = psmt.executeQuery();
+		try (Connection connn = dataSource.getConnection(); PreparedStatement psmtt = connn.prepareStatement(GET_ATTR_COUNT)){
+            //conn = dataSource.getConnection();
+			//psmt = connn.prepareStatement(GET_ATTR_COUNT);
+			psmtt.setLong(1, entityId);
+			rs = psmtt.executeQuery();
 
 			while (rs.next()) {
 				attrCount = rs.getLong(1);
 			}
+
 
 		} catch (final Exception exception) {
 			throw new Exception(exception);
@@ -352,12 +368,12 @@ public class MasterEntityDaoImplNew extends AbstractDatabaseConfig implements IM
 		long entity_id = 0;
 		ResultSet rs = null;
 
-		try {
+		try (Connection connn = dataSource.getConnection(); PreparedStatement psmtt = connn.prepareStatement(GET_ENTITY_ID_FROM_ENTITYNAME)){
 
-			conn = getDbConn();
-			psmt = conn.prepareStatement(GET_ENTITY_ID_FROM_ENTITYNAME);
-			psmt.setString(1, entityName);
-			rs = psmt.executeQuery();
+            //conn = dataSource.getConnection();
+			//psmt = connn.prepareStatement(GET_ENTITY_ID_FROM_ENTITYNAME);
+			psmtt.setString(1, entityName);
+			rs = psmtt.executeQuery();
 
 			while (rs.next()) {
 				entity_id = rs.getLong(1);
@@ -382,13 +398,13 @@ public class MasterEntityDaoImplNew extends AbstractDatabaseConfig implements IM
 
 		JSONObject jsonObject = new JSONObject();
 
-		try {
+		try (Connection connn = dataSource.getConnection(); PreparedStatement psmtt = connn.prepareStatement(GET_Record_FROM_ENTITY_KEY)){
 
-			conn = getDbConn();
-			psmt = conn.prepareStatement(GET_Record_FROM_ENTITY_KEY);
-			psmt.setLong(1, entity_key);
-			psmt.setString(2, entity_name);
-			rs = psmt.executeQuery();
+            //conn = dataSource.getConnection();
+			//psmt = connn.prepareStatement(GET_Record_FROM_ENTITY_KEY);
+			psmtt.setLong(1, entity_key);
+			psmtt.setString(2, entity_name);
+			rs = psmtt.executeQuery();
 
 			while (rs.next()) {
 				attr_name = rs.getString(1);
@@ -414,14 +430,14 @@ public class MasterEntityDaoImplNew extends AbstractDatabaseConfig implements IM
 
 		JSONObject jsonObject = new JSONObject();
 
-		try {
+		try (Connection connn = dataSource.getConnection(); PreparedStatement psmtt = connn.prepareStatement(GET_ENTITY_FROM_ENTITY_KEY)){
 
-			conn = getDbConn();
-			psmt = conn.prepareStatement(GET_ENTITY_FROM_ENTITY_KEY);
-			psmt.setString(1, entity_name);
-			psmt.setString(2, attr_name);
-			psmt.setString(3, value);
-			rs = psmt.executeQuery();
+            //conn = dataSource.getConnection();
+			//psmt = connn.prepareStatement(GET_ENTITY_FROM_ENTITY_KEY);
+			psmtt.setString(1, entity_name);
+			psmtt.setString(2, attr_name);
+			psmtt.setString(3, value);
+			rs = psmtt.executeQuery();
 
 			while (rs.next()) {
 				// entity_name = rs.getString(1);
@@ -443,10 +459,10 @@ public class MasterEntityDaoImplNew extends AbstractDatabaseConfig implements IM
 		
 		PreparedStatement statement = null;
 		
-		try {
-		
-		conn = getDbConn();
-		statement = conn.prepareStatement("INSERT INTO master_entity (eaid, entity_key,value) VALUES (?,?,?)");
+		try (Connection connn = dataSource.getConnection()){
+
+            //conn = dataSource.getConnection();
+		statement = connn.prepareStatement("INSERT INTO master_entity (eaid, entity_key,value) VALUES (?,?,?)");
 		
 		final int batchSize = 150;
 		int count = 0;

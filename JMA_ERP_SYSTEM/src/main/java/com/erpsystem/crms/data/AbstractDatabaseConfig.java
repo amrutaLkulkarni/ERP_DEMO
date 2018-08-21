@@ -41,8 +41,8 @@ public class AbstractDatabaseConfig {
 
 	}
 	
-	protected static void closeResources(final Connection conn,final ResultSet rs,final PreparedStatement psmt
-			,final Statement stmt) throws SQLException {
+	protected static void closeResources( Connection conn, ResultSet rs, PreparedStatement psmt
+			, Statement stmt) throws SQLException {
 
 		if(null!=conn) {
 			conn.close();
