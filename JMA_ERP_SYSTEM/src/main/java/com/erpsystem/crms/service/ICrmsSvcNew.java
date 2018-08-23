@@ -28,4 +28,8 @@ public interface ICrmsSvcNew {
 
 
 	public List<JSONObject> getEntityByEntityIdList(long entityId, String entity_name, String attr_name, String value)throws Exception;
+	
+	public long getAttrCount(final long entityId) throws Exception;
+	
+	public long getCount(final String entityName) throws Exception;
 }

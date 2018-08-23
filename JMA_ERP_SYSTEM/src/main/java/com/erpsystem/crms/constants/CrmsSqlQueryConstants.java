@@ -133,6 +133,8 @@ public class CrmsSqlQueryConstants {
 
 	public static final String GET_ATTR_COUNT = "SELECT COUNT(attribute_id) FROM link_entity_attribute WHERE entity_id = ?";
 	
+	public static final String GET_COUNT = "SELECT COUNT(attribute_id) FROM ent_attr_view  WHERE ent_name = ?";
+	
 	public static final String GET_ALL_Enquiry = "select entity_name,attribute_id,attr_name,value from erp_view where entity_id =2 order by entity_key,attribute_id asc;";
 	
 	public static final String GET_ALL_COMM = "select entity_name,attribute_id,attr_name,value from erp_view where entity_id =3 order by entity_key,attribute_id asc;";

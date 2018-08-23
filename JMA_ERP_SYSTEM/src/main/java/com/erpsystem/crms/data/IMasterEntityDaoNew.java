@@ -41,6 +41,10 @@ public interface IMasterEntityDaoNew {
 	public List<Map<String, String>> getEntityByEntityIdList(long entityId, String entity_name, String attr_name, String value)throws Exception;
 
 	public void addDataInMasterEntity(long entityKey, String ent_name, Map<String, String> jsonMap) throws Exception;
+	
+	public long getAttrCount(final long entityId) throws Exception;
+	
+	public long getCount(final String entityName) throws Exception;
 }	
 
 	

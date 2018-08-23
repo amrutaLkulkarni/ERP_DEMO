@@ -12,6 +12,7 @@ import static com.erpsystem.crms.constants.CrmsSqlQueryConstants.GET_Record_FROM
 import static com.erpsystem.crms.constants.CrmsSqlQueryConstants.INSERT_MASTER_ENTITY;
 import static com.erpsystem.crms.constants.CrmsSqlQueryConstants.UPDATE_MASTER_ENTITY;
 import static com.erpsystem.crms.constants.CrmsSqlQueryConstants.GET_ENTITY_FROM_ENTITY_KEY;
+import static com.erpsystem.crms.constants.CrmsSqlQueryConstants.GET_COUNT;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -361,6 +362,32 @@ public class MasterEntityDaoImplNew extends AbstractDatabaseConfig implements IM
 
 		return attrCount;
 	}
+	
+	public long getCount(final String entityName) throws Exception {
+
+		ResultSet rs = null;
+		long attrCount = 0;
+
+		try (Connection connn = dataSource.getConnection();
+				PreparedStatement psmtt = connn.prepareStatement(GET_COUNT)){
+            //conn = dataSource.getConnection();
+			//psmt = connn.prepareStatement(GET_ATTR_COUNT);
+			psmtt.setString(1, entityName);
+			rs = psmtt.executeQuery();
+
+			while (rs.next()) {
+				attrCount = rs.getLong(1);
+			}
+
+
+		} catch (final Exception exception) {
+			throw new Exception(exception);
+		} finally {
+			closeResources(conn, null, psmt, null);
+		}
+
+		return attrCount;
+	}
 
 	public long getEntityIdFromEntityName(String entityName) throws Exception {
 		// TODO Auto-generated method stub
@@ -368,7 +395,8 @@ public class MasterEntityDaoImplNew extends AbstractDatabaseConfig implements IM
 		long entity_id = 0;
 		ResultSet rs = null;
 
-		try (Connection connn = dataSource.getConnection(); PreparedStatement psmtt = connn.prepareStatement(GET_ENTITY_ID_FROM_ENTITYNAME)){
+		try (Connection connn = dataSource.getConnection(); 
+				PreparedStatement psmtt = connn.prepareStatement(GET_ENTITY_ID_FROM_ENTITYNAME)){
 
             //conn = dataSource.getConnection();
 			//psmt = connn.prepareStatement(GET_ENTITY_ID_FROM_ENTITYNAME);

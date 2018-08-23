@@ -62,6 +62,13 @@ public class CrmsSvcNewImpl implements ICrmsSvcNew {
 
 	}
 
+	public long getCount(final String entityName) throws Exception {
+		
+		long count = masterEntityDaoNew.getCount(entityName);
+		
+		return count;
+		
+	}
 	private MasterEntityModel getmasterEntityModelDtlsNew(final String ent_name, final String attr_name,
 			final String value) throws Exception {
 
@@ -172,6 +179,12 @@ public class CrmsSvcNewImpl implements ICrmsSvcNew {
 		// TODO Auto-generated method stub
 		JSONObject jsonObject = masterEntityDaoNew.getEntityByEntityId(entity_name, attr_name, value);
 		return jsonObject;
+	}
+
+	@Override
+	public long getAttrCount(long entityId) throws Exception {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	

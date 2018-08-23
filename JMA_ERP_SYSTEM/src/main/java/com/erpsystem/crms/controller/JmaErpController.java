@@ -5,10 +5,8 @@ import static com.erpsystem.crms.util.IErpUtils.convertToJsonMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.erpsystem.crms.service.ICrmsSvcNew;
 
 @RestController
@@ -39,11 +36,17 @@ public class JmaErpController {
 			
 		   jsonMap = convertToJsonMap(inputJson);
 		   
+		   
+		  
 		   final String entityName = jsonMap.get("entity_name");
 		   final long entityKey = crmsSvcNew.getEntityKeyFromSystem(entityName);
+		   final long attrCount = crmsSvcNew.getCount(entityName);
+		   final long jsonCount = jsonMap.size();
+		   
+		   if(attrCount == jsonCount) {
 		   
 		   crmsSvcNew.addRecordInSystem(entityKey,entityName,jsonMap);
-		   
+		   }
 		   /*for(Map.Entry<String, String> entry : jsonMap.entrySet()) {
 			   
 			  // if (null != entityName && !entry.getKey().equalsIgnoreCase("entityName") ) {
@@ -51,7 +54,9 @@ public class JmaErpController {
 				   crmsSvcNew.addRecordInSystem(entityKey,entityName,entry.getKey(),entry.getValue());
 			   }
 		  }	*/	 
-		   
+		  else {
+			  throw new Exception();
+		}
 		   
 		}
 		 catch (Exception exception) {
@@ -102,7 +107,11 @@ public class JmaErpController {
 			final String entityName = jsonMap.get("entity_name");
 			final String entity_key = jsonMap.get("entity_key_id");
 			//final long entityKey = crmsSvcNew.getEntityKeyFromSystemUpdate(entityName);
+			final long attrCount = crmsSvcNew.getCount(entityName);
+			 final long jsonCount = jsonMap.size();
 			
+			 if(attrCount == jsonCount) {
+			 
 			for(Map.Entry<String, String> entry : jsonMap.entrySet()) {				
 			if (null != entityName && !entry.getKey().equalsIgnoreCase("entityName")) {				
 				crmsSvcNew.updateRecordInSystem(entityName,entry.getKey(),entry.getValue(),entity_key);
@@ -111,6 +120,10 @@ public class JmaErpController {
 			
 		}
 	}
+			 else {
+				  throw new Exception();
+			}
+		}
 		catch (Exception exception) {
 			exception.printStackTrace();
 		}
