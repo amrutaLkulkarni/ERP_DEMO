@@ -12,7 +12,11 @@ import static com.erpsystem.crms.constants.CrmsSqlQueryConstants.GET_Record_FROM
 import static com.erpsystem.crms.constants.CrmsSqlQueryConstants.INSERT_MASTER_ENTITY;
 import static com.erpsystem.crms.constants.CrmsSqlQueryConstants.UPDATE_MASTER_ENTITY;
 import static com.erpsystem.crms.constants.CrmsSqlQueryConstants.GET_ENTITY_FROM_ENTITY_KEY;
+import static com.erpsystem.crms.constants.CrmsSqlQueryConstants.GET_ENTITY_ID;
 import static com.erpsystem.crms.constants.CrmsSqlQueryConstants.GET_COUNT;
+import static com.erpsystem.crms.constants.CrmsSqlQueryConstants.GET_UNAME_PASS;
+import static com.erpsystem.crms.constants.CrmsSqlQueryConstants.VALIDATE_TOKEN;
+import static com.erpsystem.crms.constants.CrmsSqlQueryConstants.GET_Entity_BLOB;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,12 +26,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import com.erpsystem.crms.model.LoginModel;
 import com.erpsystem.crms.model.MasterEntityModel;
 
 import javax.sql.DataSource;
@@ -44,6 +51,39 @@ public class MasterEntityDaoImplNew extends AbstractDatabaseConfig implements IM
 	@Autowired
     DataSource dataSource;
 
+public long getEntityId(final String entityName) throws Exception {
+		
+		long entityId = 0;
+		String entityidRs = null;
+		ResultSet rs = null;
+		
+		try {
+			
+			if (null != entityName) {
+
+				conn = getDbConn();
+				psmt = conn.prepareStatement(GET_ENTITY_ID);
+				psmt.setString(1, entityName);
+				rs = psmt.executeQuery();
+
+			}
+			
+			while(rs.next()) {
+				entityidRs = rs.getString(1);
+			}
+			
+			entityId = Long.parseLong(entityidRs);
+			
+		} catch(final Exception exception) {
+				throw new Exception(exception);
+			}finally {
+				closeResources(conn,rs,psmt,null);
+			}
+		
+		return entityId;
+		
+		}
+	
 	public long getEaId(final String ent_name, final String attr_name) throws Exception {
 
 		String eaidRs = null;
@@ -127,6 +167,9 @@ public class MasterEntityDaoImplNew extends AbstractDatabaseConfig implements IM
 			closeResources(conn, null, psmt, null);
 		}
 	}
+	
+	
+	
 
 	public long getIdentifier(String ent_name) throws Exception {
 		// TODO Auto-generated method stub
@@ -218,30 +261,7 @@ public class MasterEntityDaoImplNew extends AbstractDatabaseConfig implements IM
 
 	}
 
-	public void updateDataInMasterEntity(MasterEntityModel masterEntityModel) throws Exception {
-		// TODO Auto-generated method stub
-		try (Connection connn = dataSource.getConnection()){
-
-			if (null != masterEntityModel) {
-
-				//conn = getDbConn();
-				psmt = connn.prepareStatement(UPDATE_MASTER_ENTITY);
-
-				psmt.setString(1, masterEntityModel.getValue());
-				psmt.setLong(2, masterEntityModel.getEaid());
-				psmt.setLong(3, masterEntityModel.getEntityKey());
-
-				result = psmt.executeUpdate();
-
-			}
-
-		} catch (final Exception exception) {
-			throw new Exception(exception);
-		} finally {
-			closeResources(conn, null, psmt, null);
-		}
-
-	}
+	
 
 	public List<Map<String, String>> getAllPerson(long entityId) throws Exception {
 		// TODO Auto-generated method stub
@@ -321,7 +341,7 @@ public class MasterEntityDaoImplNew extends AbstractDatabaseConfig implements IM
 					recordMap.put(rs.getString(1), rs.getString(2));
 					counter++;
 					if (counter == attrCount - 1) {
-
+						recordMap.put("entity_key_id", rs.getString(3));
 						counter = 0;
 						jsonMapList.add(recordMap);
 						recordMap = new HashMap<>();
@@ -363,20 +383,20 @@ public class MasterEntityDaoImplNew extends AbstractDatabaseConfig implements IM
 		return attrCount;
 	}
 	
-	public long getCount(final String entityName) throws Exception {
+	public List<String> getCount(final String entityName) throws Exception {
 
 		ResultSet rs = null;
 		long attrCount = 0;
+		List<String> attrList = new ArrayList<>();
 
 		try (Connection connn = dataSource.getConnection();
 				PreparedStatement psmtt = connn.prepareStatement(GET_COUNT)){
-            //conn = dataSource.getConnection();
-			//psmt = connn.prepareStatement(GET_ATTR_COUNT);
+            
 			psmtt.setString(1, entityName);
 			rs = psmtt.executeQuery();
 
 			while (rs.next()) {
-				attrCount = rs.getLong(1);
+				attrList.add(rs.getString(1));
 			}
 
 
@@ -386,7 +406,7 @@ public class MasterEntityDaoImplNew extends AbstractDatabaseConfig implements IM
 			closeResources(conn, null, psmt, null);
 		}
 
-		return attrCount;
+		return attrList;
 	}
 
 	public long getEntityIdFromEntityName(String entityName) throws Exception {
@@ -415,7 +435,7 @@ public class MasterEntityDaoImplNew extends AbstractDatabaseConfig implements IM
 
 		return entity_id;
 	}
-
+//////////////////////////////////////////////////////////////////////////////
 	public JSONObject getEntityById(long entity_key, String entity_name) throws Exception {
 		// TODO Auto-generated method stub
 		String eaidRs = null;
@@ -426,7 +446,8 @@ public class MasterEntityDaoImplNew extends AbstractDatabaseConfig implements IM
 
 		JSONObject jsonObject = new JSONObject();
 
-		try (Connection connn = dataSource.getConnection(); PreparedStatement psmtt = connn.prepareStatement(GET_Record_FROM_ENTITY_KEY)){
+		try (Connection connn = dataSource.getConnection(); 
+				PreparedStatement psmtt = connn.prepareStatement(GET_Record_FROM_ENTITY_KEY)){
 
             //conn = dataSource.getConnection();
 			//psmt = connn.prepareStatement(GET_Record_FROM_ENTITY_KEY);
@@ -449,6 +470,85 @@ public class MasterEntityDaoImplNew extends AbstractDatabaseConfig implements IM
 
 	}
 
+	@Override
+	public JSONObject getEntityBolbById(long entity_key, long entity_id) throws Exception {
+		// TODO Auto-generated method stub
+		String blob_value = null;
+		//long entity_id = 0;
+		ResultSet rs = null;
+		String attr_name = null;
+		String value = null;
+
+		JSONObject jsonObject = new JSONObject();
+
+		try (Connection connn = dataSource.getConnection(); 
+				PreparedStatement psmtt = connn.prepareStatement(GET_Entity_BLOB)){
+
+            //conn = dataSource.getConnection();
+			//psmt = connn.prepareStatement(GET_Record_FROM_ENTITY_KEY);
+			psmtt.setLong(2, entity_key);
+			psmtt.setLong(1, entity_id);
+			rs = psmtt.executeQuery();
+
+			while (rs.next()) {
+				blob_value = rs.getString(1);
+				
+				jsonObject.put("blobValue",blob_value);
+			}
+
+		} catch (final Exception exception) {
+			throw new Exception(exception);
+		} finally {
+			closeResources(conn, rs, psmt, null);
+		}
+		return jsonObject;
+
+
+	}
+	
+	@Override
+	public JSONObject getMultiBolbById(long entity_key, long entity_id) throws Exception {
+		// TODO Auto-generated method stub
+		String blob_value = null;
+		//long entity_id = 0;
+		ResultSet rs = null;
+		String attr_name = null;
+		String value = null;
+
+		JSONArray jArray = new JSONArray();
+		JSONObject jsonObject = new JSONObject();
+		
+		
+
+		try (Connection connn = dataSource.getConnection(); 
+				PreparedStatement psmtt = connn.prepareStatement(GET_Entity_BLOB)){
+			
+
+            //conn = dataSource.getConnection();
+			//psmt = connn.prepareStatement(GET_Record_FROM_ENTITY_KEY);
+			psmtt.setLong(2, entity_key);
+			psmtt.setLong(1, entity_id);
+			rs = psmtt.executeQuery();
+
+			while (rs.next()) {
+				blob_value = rs.getString(1);
+				
+				jArray.put(blob_value);
+				
+				jsonObject.put("blobValue", jArray);
+			}
+
+		} catch (final Exception exception) {
+			throw new Exception(exception);
+		} finally {
+			closeResources(conn, rs, psmt, null);
+		}
+		return jsonObject;
+
+
+	}
+
+	
 	@Override
 	public JSONObject getEntityByEntityId(String entity_name, String attr_name, String value) throws Exception {
 		// TODO Auto-generated method stub
@@ -481,7 +581,79 @@ public class MasterEntityDaoImplNew extends AbstractDatabaseConfig implements IM
 		}
 		return jsonObject;
 	}
+	
+	public void updateDataInMasterEntity(MasterEntityModel masterEntityModel) throws Exception {
+		// TODO Auto-generated method stub
+		try (Connection connn = dataSource.getConnection()){
 
+			if (null != masterEntityModel) {
+
+				//conn = getDbConn();
+				psmt = connn.prepareStatement(UPDATE_MASTER_ENTITY);
+
+				psmt.setString(1, masterEntityModel.getValue());
+				psmt.setLong(2, masterEntityModel.getEaid());
+				psmt.setLong(3, masterEntityModel.getEntityKey());
+
+				result = psmt.executeUpdate();
+
+			}
+
+		} catch (final Exception exception) {
+			throw new Exception(exception);
+		} finally {
+			closeResources(conn, null, psmt, null);
+		}
+
+	}
+	
+	@Override
+	public void updateDataInMasterEntity(List<MasterEntityModel> listMasterEntityModel) throws Exception {
+		
+		PreparedStatement statement = null;
+		
+		try (Connection connn = dataSource.getConnection()){
+
+            //conn = dataSource.getConnection();
+		statement = connn.prepareStatement(UPDATE_MASTER_ENTITY);
+		
+		final int batchSize = 150;
+		int count = 0;
+		
+		for(MasterEntityModel masterEntityModel : listMasterEntityModel) {
+					
+					statement.setString(1, masterEntityModel.getValue());
+					statement.setLong(2,masterEntityModel.getEaid());
+					statement.setLong(3,masterEntityModel.getEntityKey());
+		
+					statement.addBatch();
+			   
+			   if(++count % batchSize == 0) {
+				   statement.executeBatch();
+				}
+				  
+			   }
+		
+		statement.executeBatch();
+		
+		} catch(Exception exception) {
+			throw new Exception(exception);
+		} finally {
+			if(null!=statement) {
+				statement.close();
+			}
+			
+			if(null!=conn) {
+				conn.close();
+			} 
+			
+			
+		}
+		
+	}
+
+	
+	
 	@Override
 	public void addDataInMasterEntity(long entityKey, String entityName, Map<String, String> jsonMap) throws Exception {
 		
@@ -536,7 +708,125 @@ public class MasterEntityDaoImplNew extends AbstractDatabaseConfig implements IM
 		
 	}
 	
+	public void addMultiImage(long entityid , String entitykey, byte [] image)throws Exception {
+		
+		PreparedStatement statement = null;
+		
+		try (Connection connn = dataSource.getConnection()){
+
+            //conn = dataSource.getConnection();
+		statement = connn.prepareStatement("INSERT INTO master_image (entity_id, entity_key,blob_value) VALUES (?,?,?)");
+		
+		final int batchSize = 150;
+		int count = 0;
+		
+		statement.setLong(1, entityid);
+		statement.setString(2, entitykey);
+		statement.setBytes(3, image);
+		statement.addBatch();
+
+		 if(++count % batchSize == 0) {
+			   statement.executeBatch();
+			}
+		 
+		 statement.executeBatch();
+		
+		} catch(Exception exception) {
+			throw new Exception(exception);
+		} finally {
+			if(null!=statement) {
+				statement.close();
+			}
+			
+			if(null!=conn) {
+				conn.close();
+			} 
+			
+			
+		}
+
+		
+	}
 	
+	
+		public void addDataInMasterEntity(long entityid , String entitykey, byte [] image)throws Exception{
+		
+		PreparedStatement statement = null;
+		
+		try (Connection connn = dataSource.getConnection()){
+
+            //conn = dataSource.getConnection();
+		statement = connn.prepareStatement("INSERT INTO master_image (entity_id, entity_key,blob_value) VALUES (?,?,?)");
+		
+		final int batchSize = 150;
+		int count = 0;
+		statement.setLong(1, entityid);
+		statement.setString(2, entitykey);
+		statement.setBytes(3, image);
+		statement.addBatch();
+
+		 if(++count % batchSize == 0) {
+			   statement.executeBatch();
+			}
+		 
+		 statement.executeBatch();
+		
+		} catch(Exception exception) {
+			throw new Exception(exception);
+		} finally {
+			if(null!=statement) {
+				statement.close();
+			}
+			
+			if(null!=conn) {
+				conn.close();
+			} 
+			
+			
+		}
+	
+	}
+	
+		@Override
+		public void updateBlob(long entityid, String entityKey, byte[] image) throws Exception {
+			// TODO Auto-generated method stub
+			PreparedStatement statement = null;
+			
+			try (Connection connn = dataSource.getConnection()){
+
+	            //conn = dataSource.getConnection();
+			statement = connn.prepareStatement("UPDATE master_image SET blob_value = ? WHERE entity_id = ? AND entity_key = ?");
+			
+			final int batchSize = 150;
+			int count = 0;
+			statement.setLong(2, entityid);
+			statement.setString(3, entityKey);
+			statement.setBytes(1, image);
+			statement.addBatch();
+
+			 if(++count % batchSize == 0) {
+				   statement.executeBatch();
+				}
+			 
+			 statement.executeBatch();
+			
+			} catch(Exception exception) {
+				throw new Exception(exception);
+			} finally {
+				if(null!=statement) {
+					statement.close();
+				}
+				
+				if(null!=conn) {
+					conn.close();
+				} 
+				
+				
+			}
+		
+		}
+	
+		
 	private MasterEntityModel getmasterEntityModelDtlsNew(final String ent_name, final String attr_name,
 			final String value) throws Exception {
 
@@ -554,5 +844,78 @@ public class MasterEntityDaoImplNew extends AbstractDatabaseConfig implements IM
 
 		return masterDetailsModel;
 	}
+
+	@Override
+	public String validateWithDb(String username, String password ) throws Exception {
+		
+		ResultSet rs = null;
+		
+		
+		try (Connection connn = dataSource.getConnection();
+				
+				PreparedStatement psmtt = connn.prepareStatement(GET_UNAME_PASS)){
+          
+			psmtt.setString(1, username);
+			psmtt.setString(2, password);
+			
+			rs = psmtt.executeQuery();
+			
+			while (rs.next()) {
+				
+				String entityKey = rs.getString(1);
+				
+				if(null!=entityKey && entityKey.length()>0) {
+					return entityKey;
+				} else {
+					return null;
+				}
+				
+			}
+
+
+		} catch (final Exception exception) {
+			throw new Exception(exception);
+		} finally {
+			closeResources(conn, null, psmt, null);
+		}
+		
+		return null;
+		
+	
+		
+	}
+
+	@Override
+	public boolean validateToken(String token) throws Exception {
+		// TODO Auto-generated method stub
+		ResultSet rs = null;
+
+		try (Connection connn = dataSource.getConnection();
+
+			PreparedStatement psmtt = connn.prepareStatement(VALIDATE_TOKEN)) {
+
+			psmtt.setString(1, token);
+
+			rs = psmtt.executeQuery();
+			
+			while(rs.next()) {
+				
+				String tokenChk = rs.getString(1);
+				
+				if(null!=tokenChk) {
+				return true;
+				}
+			} 
+
+		} catch (final Exception exception) {
+			throw new Exception(exception);
+		} finally {
+			closeResources(conn, null, psmt, null);
+		}
+		return false;
+	}
+
+	
+	
 
 }

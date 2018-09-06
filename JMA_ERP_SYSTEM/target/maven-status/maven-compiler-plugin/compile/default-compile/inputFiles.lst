@@ -26,6 +26,7 @@ E:\ZENCON\ERP_SYSTEM_17AUG\JMA_ERP_SYSTEM\src\main\java\com\erpsystem\crms\data\
 E:\ZENCON\ERP_SYSTEM_17AUG\JMA_ERP_SYSTEM\src\main\java\com\erpsystem\crms\controller\JmaErpController.java
 E:\ZENCON\ERP_SYSTEM_17AUG\JMA_ERP_SYSTEM\src\main\java\com\erpsystem\crms\model\DesignationModel.java
 E:\ZENCON\ERP_SYSTEM_17AUG\JMA_ERP_SYSTEM\src\main\java\com\erpsystem\crms\model\TargetProductModel.java
+E:\ZENCON\ERP_SYSTEM_17AUG\JMA_ERP_SYSTEM\src\main\java\com\erpsystem\crms\model\EntityIdModel.java
 E:\ZENCON\ERP_SYSTEM_17AUG\JMA_ERP_SYSTEM\src\main\java\com\erpsystem\crms\model\CommunicationModel.java
 E:\ZENCON\ERP_SYSTEM_17AUG\JMA_ERP_SYSTEM\src\main\java\com\erpsystem\crms\model\EnquiryForModel.java
 E:\ZENCON\ERP_SYSTEM_17AUG\JMA_ERP_SYSTEM\src\main\java\com\erpsystem\crms\model\StatusValueModel.java
@@ -36,4 +37,6 @@ E:\ZENCON\ERP_SYSTEM_17AUG\JMA_ERP_SYSTEM\src\main\java\com\erpsystem\crms\model
 E:\ZENCON\ERP_SYSTEM_17AUG\JMA_ERP_SYSTEM\src\main\java\com\erpsystem\crms\model\DataSearchModel.java
 E:\ZENCON\ERP_SYSTEM_17AUG\JMA_ERP_SYSTEM\src\main\java\com\erpsystem\crms\model\PersonModel.java
 E:\ZENCON\ERP_SYSTEM_17AUG\JMA_ERP_SYSTEM\src\main\java\com\erpsystem\crms\controller\RestErrorInfo.java
+E:\ZENCON\ERP_SYSTEM_17AUG\JMA_ERP_SYSTEM\src\main\java\com\erpsystem\crms\util\TestImage.java
 E:\ZENCON\ERP_SYSTEM_17AUG\JMA_ERP_SYSTEM\src\main\java\com\erpsystem\crms\controller\AbstractRestHandler.java
+E:\ZENCON\ERP_SYSTEM_17AUG\JMA_ERP_SYSTEM\src\main\java\com\erpsystem\crms\model\LoginModel.java

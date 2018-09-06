@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import org.springframework.stereotype.Repository;
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -57,5 +58,7 @@ public class AbstractDatabaseConfig {
 		}
 		
 	}
+
+	
 
 }

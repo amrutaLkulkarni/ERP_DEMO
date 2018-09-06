@@ -5,6 +5,7 @@ com\erpsystem\crms\controller\AbstractRestHandler.class
 com\erpsystem\crms\model\CommunicationModel.class
 com\erpsystem\crms\configinit\Application.class
 com\erpsystem\crms\model\StatusValueModel.class
+com\erpsystem\crms\util\TestImage.class
 com\erpsystem\crms\controller\JmaErpController.class
 com\erpsystem\crms\controller\RestErrorInfo.class
 com\erpsystem\crms\model\MasterEntityModel.class
@@ -13,9 +14,11 @@ com\erpsystem\crms\data\MasterEntityDaoImplNew.class
 com\erpsystem\crms\model\EnquiryForModel.class
 com\erpsystem\crms\controller\CrmsController.class
 com\erpsystem\crms\model\UserDetailRequest.class
+com\erpsystem\crms\model\EntityIdModel.class
 com\erpsystem\crms\service\ICrmsSvc.class
 com\erpsystem\crms\model\EnquirySourceModel.class
 com\erpsystem\crms\controller\DataFormatException.class
+com\erpsystem\crms\model\LoginModel.class
 com\erpsystem\crms\data\IMasterEntityDaoNew.class
 com\erpsystem\crms\model\TaskModel.class
 com\erpsystem\crms\model\AssignToModel.class

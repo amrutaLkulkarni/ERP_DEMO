@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.json.JSONObject;
 
+import com.erpsystem.crms.model.MasterEntityModel;
+
 public interface ICrmsSvcNew {
 
 	public void addRecordInSystem(final long entityKey,String entityName,Map<String,String> jsonMap)throws Exception;
@@ -14,7 +16,7 @@ public interface ICrmsSvcNew {
 	
 	//public long getEntityKeyFromSystemUpdate(final String entityName)throws Exception;
 
-	public void updateRecordInSystem(String entityName, String key, String value, String entity_key)throws Exception;
+	public MasterEntityModel getMasterEntityList(String entityName, String key, String value, String entity_key)throws Exception;
 
 	public List<JSONObject> getAllPerson(long entityId) throws Exception;
 
@@ -31,5 +33,30 @@ public interface ICrmsSvcNew {
 	
 	public long getAttrCount(final long entityId) throws Exception;
 	
-	public long getCount(final String entityName) throws Exception;
+	public  List<String> getCount(final String entityName) throws Exception;
+
+
+	public void updateRecordInSystem(List<MasterEntityModel> masterEntiyModelListt) throws Exception;
+
+
+	public long validateWithDb(String username, String password) throws Exception;
+
+	public boolean validateToken(String token)throws Exception;
+	
+	public long getEntityId(final String entityName) throws Exception;
+	
+	public void addRecordInSystem(long entityid , String entitykey, byte [] image)throws Exception;
+	
+	public JSONObject getEntityBolbById(long entity_key, long entity_id) throws Exception;
+	
+	public void addMultiImage(long entityid , String entitykey, byte [] image)throws Exception;
+
+	public JSONObject getMultiBolbById(long entity_key, long entity_id) throws Exception;
+
+
+	public void updateBlob(long entityid, String entityKey, byte[] image)throws Exception;
+
+
+	public void updateMultiImage(long entityid, String entitykey, byte[] image)throws Exception;
+	
 }

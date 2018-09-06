@@ -12,6 +12,8 @@ public class CrmsSqlQueryConstants {
 	public static final String INSERT_MASTER_ENTITY = "INSERT INTO master_entity (eaid, entity_key,value) VALUES (?,?,?);";
 
 	public static final String UPDATE_MASTER_ENTITY = "UPDATE master_entity SET value = ? where eaid = ? and  entity_key = ?";
+	
+	public static final String UPDATE_MASTER_BLOB = "UPDATE master_image SET blob_value = ? WHERE entity_id = ? AND entity_key = ?";
 		
 	public static final String GET_ENTITY_ID = "SELECT entity_id FROM entity_data WHERE name = ?;";
 	
@@ -32,6 +34,18 @@ public class CrmsSqlQueryConstants {
 	public static final String GET_ENTITY_KEY_UPD = "SELECT entity_key FROM master_entity WHERE eaid = ?;";
 	
 	public static final String GET_IDENTIFIER = "SELECT max(entity_key) FROM erp_view WHERE entity_name = ?;";
+	
+	public static final String VALIDATE_TOKEN ="SELECT attr_name,VALUE FROM erp_view WHERE entity_name = 'login' AND attr_name='token' AND VALUE = ?";
+	
+	public static final String GET_UNAME_PASS = "SELECT * FROM \r\n" + 
+			"(SELECT Q1.ENTITY_KEY AS ENTITY_KEY,Q1.ENTITY_NAME AS ENTITY_NAME,Q1.USERNAME AS USERNAME,Q2.PASS AS PASSWORD FROM ((SELECT ERP_VIEW_USER.ENTITY_ID AS ENTITY_ID,ERP_VIEW_USER.ENTITY_NAME AS ENTITY_NAME,ERP_VIEW_USER.VALUE AS USERNAME,ERP_VIEW_USER.ENTITY_KEY AS ENTITY_KEY \r\n" + 
+			"FROM erp_view ERP_VIEW_USER \r\n" + 
+			"WHERE entity_name = 'login' AND attr_name='username' AND entity_key \r\n" + 
+			"IN((SELECT DISTINCT(entity_key) FROM erp_view))) Q1),\r\n" + 
+			"((SELECT ERP_VIEW_PASS.ENTITY_ID AS ENTITY_ID,ERP_VIEW_PASS.ENTITY_NAME AS ENTITY_NAME,ERP_VIEW_PASS.VALUE AS PASS,ERP_VIEW_PASS.ENTITY_KEY AS ENTITY_KEY \r\n" + 
+			"FROM erp_view ERP_VIEW_PASS \r\n" + 
+			"WHERE entity_name = 'login' AND attr_name='password' AND entity_key \r\n" + 
+			"IN((SELECT DISTINCT(entity_key) FROM erp_view))) Q2) WHERE Q1.ENTITY_KEY = Q2.ENTITY_KEY) LOGIN_TABLE WHERE USERNAME=? AND PASSWORD=?;";
 	
 	public static final String GET_USER_DTLS_BY_MOB = "SELECT entity_id,GROUP_CONCAT(ex.value SEPARATOR ',') As Values1 FROM\r\n" + 
 			"(select entity_id,value from erp_view ev where ev.entity_name = 'person' and ev.entity_key IN\r\n" + 
@@ -129,11 +143,14 @@ public class CrmsSqlQueryConstants {
 	
 	public static final String 	GET_Record_FROM_ENTITY_KEY = "SELECT attr_name, VALUE FROM erp_view WHERE entity_key = ? AND entity_name= ?;";
 	
-	public static final String 	GET_ENTITY_FROM_ENTITY_KEY = "SELECT attr_name, VALUE FROM erp_view WHERE entity_name=? AND entity_key IN (SELECT entity_key FROM erp_view WHERE attr_name = ? AND VALUE = ? AND entity_name = ?);";
+	public static final String 	GET_Entity_BLOB = "SELECT blob_value FROM master_image WHERE entity_id = ? AND entity_key = ?;";
+	
+	
+	public static final String 	GET_ENTITY_FROM_ENTITY_KEY = "SELECT attr_name, VALUE, entity_key FROM erp_view WHERE entity_name=? AND entity_key IN (SELECT entity_key FROM erp_view WHERE attr_name = ? AND VALUE = ? AND entity_name = ?);";
 
 	public static final String GET_ATTR_COUNT = "SELECT COUNT(attribute_id) FROM link_entity_attribute WHERE entity_id = ?";
 	
-	public static final String GET_COUNT = "SELECT COUNT(attribute_id) FROM ent_attr_view  WHERE ent_name = ?";
+	public static final String GET_COUNT = "SELECT attr_name FROM ent_attr_view  WHERE ent_name = ?";
 	
 	public static final String GET_ALL_Enquiry = "select entity_name,attribute_id,attr_name,value from erp_view where entity_id =2 order by entity_key,attribute_id asc;";
 	

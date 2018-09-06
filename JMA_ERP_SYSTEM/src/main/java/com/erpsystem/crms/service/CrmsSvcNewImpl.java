@@ -1,6 +1,7 @@
 package com.erpsystem.crms.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,29 +13,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.erpsystem.crms.data.IMasterEntityDaoNew;
 import com.erpsystem.crms.model.MasterEntityModel;
+import com.erpsystem.crms.util.IErpUtils;
 
 @Service
 public class CrmsSvcNewImpl implements ICrmsSvcNew {
+	
+	public CrmsSvcNewImpl() {
+		
+		
+	}
 
 	@Autowired
 	IMasterEntityDaoNew masterEntityDaoNew;
 
-	/*@Transactional(propagation = Propagation.REQUIRED)
-	public void addRecordInSystem(final long entityKey, final String ent_name, final String attr_name,
-			final String value) throws Exception {
-
-		if (null != masterEntityDaoNew) {
-			MasterEntityModel masterEntityModel = getmasterEntityModelDtlsNew(ent_name, attr_name, value);
-
-			long eaid = Long.valueOf(masterEntityModel.getEaid());
-
-			masterEntityModel.setEaid(eaid);
-			masterEntityModel.setEntityKey(entityKey);
-			masterEntityModel.setValue(value);
-
-			masterEntityDaoNew.addDataInMasterEntity(masterEntityModel);
-		}
-	}*/
+	
 	
 	@Transactional(propagation = Propagation.REQUIRED)
 	public void addRecordInSystem(final long entityKey, final String ent_name, final Map<String,String> jsonMap) 
@@ -46,6 +38,26 @@ public class CrmsSvcNewImpl implements ICrmsSvcNew {
 		}
 	}
 
+	@Override
+	public void addRecordInSystem(long entityid, String entitykey, byte[] image) throws Exception {
+		// TODO Auto-generated method stub
+		if (null != masterEntityDaoNew) {
+
+			masterEntityDaoNew.addDataInMasterEntity(entityid, entitykey, image);
+	}
+		
+		
+		
+	}	
+	
+	@Override
+	public void updateBlob(long entityid, String entityKey, byte[] image) throws Exception {
+		// TODO Auto-generated method stub
+		masterEntityDaoNew.updateBlob(entityid, entityKey, image);
+		
+	}
+	
+	
 	public long getEntityKeyFromSystem(final String entityName) throws Exception {
 
 		long entityKey = masterEntityDaoNew.getIdentifier(entityName);
@@ -62,11 +74,11 @@ public class CrmsSvcNewImpl implements ICrmsSvcNew {
 
 	}
 
-	public long getCount(final String entityName) throws Exception {
+	public List<String> getCount(final String entityName) throws Exception {
 		
-		long count = masterEntityDaoNew.getCount(entityName);
+		List<String> attrList = masterEntityDaoNew.getCount(entityName);
 		
-		return count;
+		return attrList;
 		
 	}
 	private MasterEntityModel getmasterEntityModelDtlsNew(final String ent_name, final String attr_name,
@@ -104,7 +116,7 @@ public class CrmsSvcNewImpl implements ICrmsSvcNew {
 
 	}
 
-	@Transactional(propagation = Propagation.REQUIRED)
+	/*@Transactional(propagation = Propagation.REQUIRED)
 	public void updateRecordInSystem(String entityName, String key, String value, String entity_key) throws Exception {
 		// TODO Auto-generated method stub
 		if (null != masterEntityDaoNew) {
@@ -112,6 +124,30 @@ public class CrmsSvcNewImpl implements ICrmsSvcNew {
 
 			masterEntityDaoNew.updateDataInMasterEntity(masterEntityModel);
 		}
+
+	}*/
+	
+	@Transactional(propagation = Propagation.REQUIRED)
+	public void updateRecordInSystem(List<MasterEntityModel> listMasterEntityModel) throws Exception {
+		// TODO Auto-generated method stub
+		
+		masterEntityDaoNew.updateDataInMasterEntity(listMasterEntityModel);
+
+	}
+	
+	@Transactional(propagation = Propagation.REQUIRED)
+	public MasterEntityModel getMasterEntityList(String entityName, String key, String value, String entity_key) throws Exception {
+		// TODO Auto-generated method stub
+		
+		MasterEntityModel masterEntityModel = null;
+		
+		if (null != masterEntityDaoNew) {
+			
+			masterEntityModel = getMasterEntityModelForUpdate(entityName, key, value,entity_key);
+			
+		}
+		
+		return masterEntityModel;
 
 	}
 	
@@ -165,7 +201,7 @@ public class CrmsSvcNewImpl implements ICrmsSvcNew {
 	public long getEntityIdFromEntityName(String entityName) throws Exception {
 		return masterEntityDaoNew.getEntityIdFromEntityName(entityName);
 	}
-
+///////////////////////////
 	@Transactional(propagation = Propagation.REQUIRED)
 	public JSONObject getEntityById(long entity_key, String entity_name) throws Exception {
 		// TODO Auto-generated method stub
@@ -174,6 +210,18 @@ public class CrmsSvcNewImpl implements ICrmsSvcNew {
 		return jsonObj;
 	}
 
+	@Override
+	public JSONObject getEntityBolbById(long entity_key, long entity_id) throws Exception {
+		// TODO Auto-generated method stub
+		JSONObject jsonObj =masterEntityDaoNew.getEntityBolbById(entity_key, entity_id);
+		return jsonObj;
+	}
+	
+	public JSONObject getMultiBolbById(long entity_key, long entity_id) throws Exception {
+		// TODO Auto-generated method stub
+		JSONObject jsonObj =masterEntityDaoNew.getMultiBolbById(entity_key, entity_id);
+		return jsonObj;
+	}
 
 	public JSONObject getEntityByEntityId(String entity_name, String attr_name, String value) throws Exception {
 		// TODO Auto-generated method stub
@@ -181,11 +229,72 @@ public class CrmsSvcNewImpl implements ICrmsSvcNew {
 		return jsonObject;
 	}
 
+	
+
+	@Override
+	public long validateWithDb(String username, String password) throws Exception {
+		
+		String entityKey =  masterEntityDaoNew.validateWithDb(username,password);
+		 
+		long entity_key = Long.parseLong(entityKey);
+		 long ranNo = IErpUtils.generateRandonNo();
+		 
+		 String random = Long.toString(ranNo);
+		 
+		 Map<String, String> jsonMap = new HashMap<String, String>();
+			
+		 jsonMap.put("token", random);
+		 masterEntityDaoNew.addDataInMasterEntity(entity_key, "login", jsonMap);
+		 
+				
+		return ranNo;
+		 
+	}
+	
+	public boolean validateToken(String token)throws Exception {
+		
+		
+		return masterEntityDaoNew.validateToken(token);
+		
+	}
+
 	@Override
 	public long getAttrCount(long entityId) throws Exception {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+	@Override
+	public long getEntityId(String entityName) throws Exception {
+		// TODO Auto-generated method stub
+		return masterEntityDaoNew.getEntityId(entityName);
+	}
+
+	@Override
+	public void addMultiImage(long entityid, String entitykey, byte[] image) throws Exception {
+		// TODO Auto-generated method stub
+		if (null != masterEntityDaoNew) {
+
+			masterEntityDaoNew.addMultiImage(entityid, entitykey, image);
+			
+			
+		}
+	}
+
+	@Override
+	public void updateMultiImage(long entityid, String entitykey, byte[] image) throws Exception {
+		// TODO Auto-generated method stub
+		masterEntityDaoNew.updateBlob(entityid, entitykey, image);
+		
+	}
+
+	
+
+
+	
+	
+
+	
 
 	
 	

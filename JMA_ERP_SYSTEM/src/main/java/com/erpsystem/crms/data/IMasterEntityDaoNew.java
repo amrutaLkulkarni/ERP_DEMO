@@ -3,8 +3,10 @@ package com.erpsystem.crms.data;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.erpsystem.crms.model.LoginModel;
 import com.erpsystem.crms.model.MasterEntityModel;
 
 public interface IMasterEntityDaoNew {
@@ -25,7 +27,7 @@ public interface IMasterEntityDaoNew {
 	
 	public long getEntityKeyFromEaid(long eaid)throws Exception;
 	
-	public void updateDataInMasterEntity(MasterEntityModel masterEntityModel)throws Exception;
+	public void updateDataInMasterEntity(List<MasterEntityModel> listMasterEntityModel)throws Exception;
 	
 	//GETALLENTITY
 	public List <Map<String,String>> getAllPerson(long entityId) throws Exception;
@@ -44,7 +46,24 @@ public interface IMasterEntityDaoNew {
 	
 	public long getAttrCount(final long entityId) throws Exception;
 	
-	public long getCount(final String entityName) throws Exception;
+	public List<String> getCount(final String entityName) throws Exception;
+
+	public String validateWithDb(String username, String password) throws Exception;
+
+	public boolean validateToken(String token)throws Exception;
+
+	public long getEntityId(final String entityName) throws Exception;
+	
+	public void addDataInMasterEntity(long entityid , String entitykey, byte [] image)throws Exception;
+	
+	public JSONObject getEntityBolbById(long entity_key, long entity_id) throws Exception;
+	
+	public void addMultiImage(long entityid , String entitykey, byte [] image)throws Exception;
+	
+	public JSONObject getMultiBolbById(long entity_key, long entity_id) throws Exception;
+	/*void updateDataInMasterEntity(long entityKey, String entityName, Map<String, String> jsonMap) throws Exception;*/
+
+	public void updateBlob(long entityid, String entityKey, byte[] image)throws Exception;
 }	
 
 	
