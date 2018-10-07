@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: JMA_ERP_SYSTEM_18_sep
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: AMRUTA
+Implementation-Vendor-Id: com.JMA
+Build-Jdk: 1.8.0_161
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/JMA_ERP_SYSTEM_18_sep
+Created-By: Maven Integration for Eclipse
+
